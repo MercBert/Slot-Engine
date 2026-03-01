@@ -1,0 +1,21 @@
+{
+  "team": "justmerc",
+  "gameName": "slots-engine",
+  "displayTitle": "Slots Engine",
+  "description": "Cluster-pay cascade slot machine with explosive chain reactions. Match 5+ symbols to trigger cascading wins.",
+  "authors": [
+    {
+      "name": "Merc",
+      "email": "merc.bert300@gmail.com"
+    }
+  ],
+  "status": "pending",
+  "category": "arcade",
+  "tags": ["slots", "cascade", "arcade", "instant-win"],
+  "thumbnail": "/slots-engine/card.png",
+  "banner": "/slots-engine/banner.png",
+  "mainComponent": "SlotsEngine.tsx",
+  "windowComponent": "SlotsEngineWindow.tsx",
+  "setupComponent": "SlotsEngineSetupCard.tsx",
+  "version": "1.0.0"
+}
