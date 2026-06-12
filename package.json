@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "simulate": "SIM=1 vitest run tests/rtp-simulation.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.3",
