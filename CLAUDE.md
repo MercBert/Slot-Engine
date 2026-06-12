@@ -11,6 +11,13 @@
 - ALWAYS read a file before editing it
 - NEVER commit secrets, credentials, or .env files
 
+### Core Principles
+
+1. **Think before coding** — State assumptions before implementing. If multiple interpretations exist, present them — never pick silently. Surface confusion and tradeoffs; push back when warranted.
+2. **Simplicity first** — Write the minimum code that solves the problem, nothing speculative. No features beyond what was asked, no abstractions for single use. If 200 lines could be 50, rewrite it.
+3. **Surgical changes** — Touch only what the task requires. Don't improve adjacent code, comments, or formatting. Every changed line must trace directly to the request.
+4. **Goal-driven execution** — Define success criteria before starting multi-step work, then loop until verified. For bug fixes: write a failing test that reproduces the bug, then make it pass.
+
 ## File Organization
 
 - NEVER save to root folder — use the directories below
