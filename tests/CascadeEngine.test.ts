@@ -1,8 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { calculateClusterWin, performCascade, runFullCascade } from '@/engine/CascadeEngine';
 import { detectClusters } from '@/engine/ClusterDetector';
+import { GAME_CONFIG } from '@/config/game-config';
 import { Cluster } from '@/types';
 import { gridFromLayout, symbolLayout, checkerboard } from './helpers';
+
+// Size payout for a minimum (5-cell) cluster — read from config so payout
+// tuning doesn't break these tests. The tier multipliers and scaling logic
+// are asserted with literals; the RTP simulation guards the actual values.
+const P5 = GAME_CONFIG.clusterPayouts[5];
 
 // Replace the weighted RNG with a scripted queue so every refill is
 // deterministic. Each test enqueues exactly the symbols it expects to drop in.
@@ -27,14 +33,14 @@ function cluster(symbolId: string, size: number, cells: { row: number; col: numb
 
 describe('calculateClusterWin', () => {
   it('pays bet × size payout × tier multiplier', () => {
-    // gem is tier 1 → multiplier 8; cluster of 5 → payout 2
-    expect(calculateClusterWin([cluster('gem', 5)], 1)).toBe(16);
+    // gem is tier 1 → multiplier 8
+    expect(calculateClusterWin([cluster('gem', 5)], 1)).toBe(P5 * 8);
     // leaf is tier 8 → multiplier 1
-    expect(calculateClusterWin([cluster('leaf', 5)], 1)).toBe(2);
+    expect(calculateClusterWin([cluster('leaf', 5)], 1)).toBe(P5 * 1);
   });
 
   it('scales linearly with the bet amount', () => {
-    expect(calculateClusterWin([cluster('gem', 5)], 2)).toBe(32);
+    expect(calculateClusterWin([cluster('gem', 5)], 2)).toBe(P5 * 8 * 2);
   });
 
   it('caps the size payout at the 15-cell tier', () => {
@@ -42,7 +48,7 @@ describe('calculateClusterWin', () => {
   });
 
   it('sums wins across multiple clusters', () => {
-    expect(calculateClusterWin([cluster('gem', 5), cluster('leaf', 5)], 1)).toBe(18);
+    expect(calculateClusterWin([cluster('gem', 5), cluster('leaf', 5)], 1)).toBe(P5 * 8 + P5);
   });
 });
 
@@ -133,8 +139,8 @@ describe('runFullCascade', () => {
     const { finalGrid, cascades, totalWin } = runFullCascade(grid, detectClusters(grid), 1);
 
     expect(cascades).toHaveLength(1);
-    expect(cascades[0].stepWin).toBe(16); // gem (tier 1, ×8) cluster of 5 (×2) at bet 1
-    expect(totalWin).toBe(16);
+    expect(cascades[0].stepWin).toBe(P5 * 8); // gem (tier 1, ×8) cluster of 5 at bet 1
+    expect(totalWin).toBe(P5 * 8);
     expect(cascades[0].newClusters).toHaveLength(0);
     expect(detectClusters(finalGrid)).toHaveLength(0);
   });
@@ -153,9 +159,9 @@ describe('runFullCascade', () => {
     const { finalGrid, cascades, totalWin } = runFullCascade(grid, detectClusters(grid), 1);
 
     expect(cascades).toHaveLength(2);
-    expect(cascades[0].stepWin).toBe(16); // gem: tier 1 → ×8, size 5 → ×2
-    expect(cascades[1].stepWin).toBe(14); // shield: tier 2 → ×7, size 5 → ×2
-    expect(totalWin).toBe(30);
+    expect(cascades[0].stepWin).toBe(P5 * 8); // gem: tier 1 → ×8
+    expect(cascades[1].stepWin).toBe(P5 * 7); // shield: tier 2 → ×7
+    expect(totalWin).toBe(P5 * 8 + P5 * 7);
     expect(detectClusters(finalGrid)).toHaveLength(0);
   });
 });

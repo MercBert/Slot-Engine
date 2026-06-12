@@ -61,11 +61,13 @@ Win distribution:   ${Object.entries(buckets)
       .join('  |  ')}
 `);
 
-    // Sanity invariants only — the measurement is the deliverable, and no
-    // target RTP has been chosen yet for this game.
     expect(Number.isFinite(totalWin)).toBe(true);
     expect(totalWin).toBeGreaterThanOrEqual(0);
-    expect(hitFrequency).toBeGreaterThanOrEqual(0);
-    expect(hitFrequency).toBeLessThanOrEqual(1);
+
+    // Regression band: clusterPayouts are tuned to ~94-95% RTP (measured
+    // ±1.5% noise at 100k spins). A payout/weight/tier change that moves RTP
+    // outside 90-100% breaks the game's economics and must fail here.
+    expect(rtp).toBeGreaterThan(0.9);
+    expect(rtp).toBeLessThan(1.0);
   }, 600_000);
 });
