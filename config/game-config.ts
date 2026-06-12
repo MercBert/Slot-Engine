@@ -5,19 +5,20 @@ export const GAME_CONFIG = {
   startingBalance: 1000,
   defaultBet: 1,
   betOptions: [0.5, 1, 2, 5, 10, 25],
-  // Payout multipliers by cluster size (dummy values)
+  // Payout multipliers by cluster size, tuned to ~95% RTP
+  // (measured via `npm run simulate`; final win = bet × payout × tier multiplier)
   clusterPayouts: {
-    5: 2,
-    6: 3,
-    7: 5,
-    8: 8,
-    9: 12,
-    10: 15,
-    11: 20,
-    12: 30,
-    13: 50,
-    14: 75,
-    15: 100,
+    5: 0.77,
+    6: 1.12,
+    7: 1.9,
+    8: 3,
+    9: 4.5,
+    10: 5.7,
+    11: 7.5,
+    12: 11,
+    13: 19,
+    14: 28,
+    15: 38,
   } as Record<number, number>,
   // Animation timing (ms)
   animation: {

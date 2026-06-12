@@ -45,6 +45,7 @@ function useCountUp(target: number, active: boolean) {
   useEffect(() => {
     if (!active || target <= 0) {
       prevRef.current = 0;
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional count-up reset; subsequent updates run in rAF
       setDisplayed(0);
       return;
     }

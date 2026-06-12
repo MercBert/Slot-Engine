@@ -48,6 +48,7 @@ export function ClusterParticles({ clusters, state, rows, cols }: Props) {
 
   useEffect(() => {
     if (!isResolving || clusters.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional particle teardown when leaving RESOLVING
       setParticles([]);
       return;
     }
