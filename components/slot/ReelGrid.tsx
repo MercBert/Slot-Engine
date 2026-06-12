@@ -21,12 +21,7 @@ export function ReelGrid({
   cascadeNewCellKeys = [],
   cascadeFallenCells = [],
 }: Props) {
-  if (grid.length === 0) return null;
-
-  const rows = grid.length;
-  const cols = grid[0].length;
-
-  // Build lookup sets for O(1) access
+  // Build lookup sets for O(1) access — hooks must run before any early return
   const newCellSet = useMemo(
     () => new Set(cascadeNewCellKeys),
     [cascadeNewCellKeys],
@@ -38,6 +33,11 @@ export function ReelGrid({
     }
     return map;
   }, [cascadeFallenCells]);
+
+  if (grid.length === 0) return null;
+
+  const rows = grid.length;
+  const cols = grid[0].length;
 
   return (
     <div className="bg-slate-900/80 rounded-2xl border border-purple-500/20 p-2 shadow-2xl shadow-purple-900/30">

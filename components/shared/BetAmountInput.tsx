@@ -44,6 +44,9 @@ export const BetAmountInput: React.FC<CompactAmountInputProps> = ({
 
     useEffect(() => {
         if (parseFloat(inputValue) !== value) {
+            // Intentional controlled-input sync: the text field allows transient
+            // invalid strings, so it must re-sync when the value prop changes.
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setInputValue(String(value));
         }
     }, [value]);
@@ -56,6 +59,7 @@ export const BetAmountInput: React.FC<CompactAmountInputProps> = ({
         // clamp the bet amount to the new maximum. This handles cases like switching
         // from a higher value currency (APE) to a lower one (USD).
         if (value > max) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional clamp when the max changes under the current bet
             handleValueChange(max);
         }
     }, [max, value, handleValueChange, disabled]);
